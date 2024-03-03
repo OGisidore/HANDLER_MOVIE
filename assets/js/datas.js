@@ -1,5 +1,5 @@
 
-const  filmData = [
+export const  filmData = [
     {
         id : 1,
         title: "Intouchables",
@@ -148,11 +148,4 @@ const  filmData = [
         genre : "Drame"
     }
 
-    /*
-    {
-      title : "" ,
-      image : "assets/images/" ,
-      text : ""
-     },
-     */
 ]

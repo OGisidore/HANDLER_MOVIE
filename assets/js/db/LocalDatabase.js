@@ -125,9 +125,8 @@ export class LocalDatabase {
      * @returns {Promise} A promise that resolves with the retrieved data.
      */
     async getData(dbTable, key) {
-        if (!this.db) {
-            this.db = await this.dbPromise;
-        }
+       
+        this.db = await this.dbPromise;
         return new Promise((resolve, reject) => {
             const transaction = this.db.transaction(dbTable, 'readonly');
             const objectStore = transaction.objectStore(dbTable);

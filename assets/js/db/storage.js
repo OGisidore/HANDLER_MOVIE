@@ -1,3 +1,4 @@
+import { filmData } from "../datas.js";
 import { LocalDatabase } from "./LocalDatabase.js";
 
 const dbStructure = [
@@ -28,10 +29,18 @@ const dbStructure = [
         ]
     }
 ]
-const database = new LocalDatabase('mudey', dbStructure,  3 )
+const database = new LocalDatabase('mudey', dbStructure,  5 )
 
 export const initFilms = async () => {
-    return await database.getAllData('films')
+    let films =  await database.getAllData('films')
+    if(!films.length){
+        await Promise.all(filmData.map(async(film) => await addFilm(film)))
+        films =  await database.getAllData('films')
+    }
+    return films
+}
+export const getFilm = async (id) => {
+    return await database.getData('films', id)
 }
 export const addFilm = async (newFilms) => {
     delete newFilms._id

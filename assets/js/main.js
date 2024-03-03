@@ -1,7 +1,6 @@
 import { blobToURL, fileToBlob } from './lib/fileHelpers.js';
-import { addFilm, deleteFilm, initFilms, updateFilm } from './db/storage.js';
+import { addFilm, deleteFilm, getFilm, initFilms, updateFilm } from './db/storage.js';
 import { Film } from './models/Film.js';
-import { current_movie } from './tash/functions.js';
 
 window.onload = async () => {
 
@@ -106,7 +105,7 @@ window.onload = async () => {
     }
     const handleEdit = async (event) => {
         try {
-            console.log('target : ', event.target);
+           
             let targetElement = event.target
             let id = targetElement.dataset.id;
             if (!id) {
@@ -116,7 +115,9 @@ window.onload = async () => {
                 }
             }
 
-            const film = (await initFilms()).find(d => d._id == id)
+            id = parseInt(id)
+            const film = await getFilm(id)
+
             console.log({film, id});
             if (film) {
                 currentFilm = film
@@ -152,7 +153,8 @@ window.onload = async () => {
                 }
             }
             
-            const film = (await initFilms()).find(d => d._id == id)
+            id = parseInt(id)
+            const film = await getFilm(id)
             console.log(film);
             
              const confirmDelete = confirm(`Êtes vous sûr de vouloir supprimer le film : ${film?.title}`)
