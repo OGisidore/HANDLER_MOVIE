@@ -12,6 +12,16 @@ window.onload = async () => {
     var currentFilm = undefined
 
 
+    const hideModal = () => {
+        form.reset()
+        previewImg.src = ''
+        formModal.classList.add('d-none')
+    }
+    const showModal = () => {
+        form.reset()
+        previewImg.src = ''
+        formModal.classList.remove('d-none')
+    }
     const toogleModal = () => {
         formModal.classList.toggle('d-none')
     }
@@ -152,7 +162,7 @@ window.onload = async () => {
                     id = parent.dataset.id
                 }
             }
-            
+
             id = parseInt(id)
             const film = await getFilm(id)
             console.log(film);
@@ -170,14 +180,22 @@ window.onload = async () => {
         }
 
     }
+
+    const handleFileChange = (event) =>{
+        const {files} = event.target
+        if(files[0]){
+            previewImg.src = blobToURL(files[0])
+        }
+    }
     
 
 
 
 
     displayFilms()
-    addFilmButton.onclick = toogleModal
-    closeFormModal.onclick = toogleModal
+    addFilmButton.onclick = showModal
+    closeFormModal.onclick = hideModal
     form.onsubmit = handleSubmit
+    form.querySelector("input[type='file']").onchange = handleFileChange
 
 }
