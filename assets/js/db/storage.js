@@ -7,7 +7,9 @@ const dbStructure = [
             {
                 primaryKey: '_id',
                 indexes: [
-                    { title: { unique: true } }
+                    { title: { unique: true } },
+                    { genre: { unique: true } },
+                    { annee: { unique: true } },
                 ]
             }
         ]
@@ -29,7 +31,7 @@ const dbStructure = [
         ]
     }
 ]
-const database = new LocalDatabase('mudey', dbStructure,  1 )
+const database = new LocalDatabase('mudey', dbStructure,  2 )
 
 export const initFilms = async () => {
     let films =  await database.getAllData('films')
@@ -49,8 +51,8 @@ export const addFilm = async (newFilms) => {
 export const updateFilm = async (newFilms) => {
     await database.updateData('films', newFilms)
 }
-export const searchFilm = async (tag) => {
-    return await database.search('films','title', tag)
+export const searchFilm = async (tag, indexName='title') => {
+    return await database.search('films',indexName, tag)
 }
 export const deleteFilm = async (id) => {
     await database.deleteData('films', id)

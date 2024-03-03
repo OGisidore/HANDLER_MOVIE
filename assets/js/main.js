@@ -10,6 +10,7 @@ window.onload = async () => {
     const addFilmButton = document.querySelector('.addFilmButton')
     const previewImg = document.querySelector('#preview')
     const searchBox = document.querySelector('#search')
+    const genreSelector = document.querySelector('#genreSelector')
     var currentFilm = undefined
 
 
@@ -211,6 +212,13 @@ window.onload = async () => {
         displayFilms(films)
         
     }
+    const handleSearchByGenre = async (event) => {
+        const { value } = event.target
+        console.log(value);
+        const films = await searchFilm(value, 'genre')
+        displayFilms(films)
+        
+    }
 
 
 
@@ -221,6 +229,7 @@ window.onload = async () => {
     closeFormModal.onclick = hideModal
     form.onsubmit = handleSubmit
     searchBox.onkeyup = handleSearch
+    genreSelector.onchange = handleSearchByGenre
     form.querySelector("input[type='file']").onchange = handleFileChange
 
 }
