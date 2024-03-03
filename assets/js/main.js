@@ -145,6 +145,7 @@ window.onload = async () => {
             let targetElement = event.target
             
             let id = targetElement.dataset.id;
+            console.log(id);
             if (!id) {
                 let parent = targetElement.closest('.deleteFilmButton')
                 if (parent) {
@@ -152,15 +153,15 @@ window.onload = async () => {
                 }
             }
             
-            const film = (await initFilms()).find(d => d._id == id)
+            const film = (await initFilms()).find(d =>  d._id == id)
             console.log(film);
             
              const confirmDelete = confirm(`Êtes vous sûr de vouloir supprimer le film : ${film?.title}`)
              if(confirmDelete){
                 deleteFilm(id)
-                displayFilms()
+                
              }
-            
+            displayFilms()
             
 
         } catch (error) {
