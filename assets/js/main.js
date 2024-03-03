@@ -11,6 +11,7 @@ window.onload = async () => {
     const previewImg = document.querySelector('#preview')
     const searchBox = document.querySelector('#search')
     const genreSelector = document.querySelector('#genreSelector')
+    let filmItems
     var currentFilm = undefined
 
 
@@ -35,7 +36,7 @@ window.onload = async () => {
         form.reset()
         const films_list = document.querySelector('.films_list')
         films_list.innerHTML = ''
-        if(!films){
+        if (!films) {
             films = await initFilms()
         }
         films.forEach((data) => {
@@ -44,6 +45,13 @@ window.onload = async () => {
 
 
         })
+        displayFilmItem(films[0])
+
+        filmItems = document.querySelectorAll('.film-item')
+
+        filmItems.forEach(filmItem => {
+            filmItem.onclick = handleSetCurrentFilm
+        });
 
         const editFilmButtons = document.querySelectorAll('.editFilmButton')
         editFilmButtons.forEach(editFilm => {
@@ -98,7 +106,7 @@ window.onload = async () => {
                 const errorElement = document.querySelector('.error-' + error.target);
                 if (errorElement) {
                     errorElement.innerHTML = error.errorMessage;
-        
+
                     // Supprimer l'erreur après un certain temps (par exemple, 5 secondes)
                     setTimeout(() => {
                         errorElement.innerHTML = '';
@@ -210,14 +218,58 @@ window.onload = async () => {
         const { value } = event.target
         const films = await searchFilm(value)
         displayFilms(films)
-        
+
     }
     const handleSearchByGenre = async (event) => {
         const { value } = event.target
         console.log(value);
         const films = await searchFilm(value, 'genre')
         displayFilms(films)
-        
+
+    }
+
+    const handleSetCurrentFilm = async (event) => {
+        const id = parseInt(event.target.dataset.id)
+        if (id) {
+            const film = await getFilm(id)
+
+            displayFilmItem(film)
+        }
+    }
+    const displayFilmItem = async (film) => {
+        if (typeof film.image !== "string") {
+            film.image = blobToURL(film.image)
+        }
+        document.getElementById('currentFilm').innerHTML = `
+            <div class="description">
+
+            <div class="text">
+
+                <h2>${film.title}</h2>
+
+                <span>Annee : ${film.annee}</span>
+
+                <span>Genre : ${film.genre}</span>
+
+                <span> Par : ${film.realisateur}</span>
+
+                <p>
+                ${film.text}
+                </p>
+
+            </div>
+
+            <div class="image">
+
+                <img src="${film.image}" alt="">
+
+
+
+            </div>
+
+        </div>
+            `
+
     }
 
 
@@ -231,5 +283,7 @@ window.onload = async () => {
     searchBox.onkeyup = handleSearch
     genreSelector.onchange = handleSearchByGenre
     form.querySelector("input[type='file']").onchange = handleFileChange
+
+
 
 }

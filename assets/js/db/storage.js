@@ -7,9 +7,9 @@ const dbStructure = [
             {
                 primaryKey: '_id',
                 indexes: [
-                    { title: { unique: true } },
-                    { genre: { unique: true } },
-                    { annee: { unique: true } },
+                    { title: { unique: false } },
+                    { genre: { unique: false } },
+                    { annee: { unique: false } },
                 ]
             }
         ]
