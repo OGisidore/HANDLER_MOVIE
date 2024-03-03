@@ -46,7 +46,7 @@ window.onload = async () => {
             editFilm.onclick = handleEdit
 
         });
-       
+
         const deleteFilmButtons = document.querySelectorAll('.deleteFilmButton')
         deleteFilmButtons.forEach(deleteFilm => {
             deleteFilm.onclick = handleDelete
@@ -77,7 +77,7 @@ window.onload = async () => {
         }
 
         var newFilm = new Film(
-            '',
+            currentFilm?._id || '',
             form.elements["title"]?.value,
             form.elements["realisateur"]?.value,
             form.elements["text"]?.value,
@@ -87,8 +87,21 @@ window.onload = async () => {
         )
 
         // Validation des données reçues
-        if (!newFilm.isValid()) {
+        if (!newFilm.validators.isValid) {
             // afficher les messages d'erreurs
+            const errors = newFilm.validators.errors;
+            errors.forEach(error => {
+                const errorElement = document.querySelector('.error-' + error.target);
+                if (errorElement) {
+                    errorElement.innerHTML = error.errorMessage;
+        
+                    // Supprimer l'erreur après un certain temps (par exemple, 5 secondes)
+                    setTimeout(() => {
+                        errorElement.innerHTML = '';
+                    }, 2000); // ajustez le délai en millisecondes selon vos besoins
+                }
+            });
+            return;
         }
 
         if (currentFilm) {
@@ -115,7 +128,7 @@ window.onload = async () => {
     }
     const handleEdit = async (event) => {
         try {
-           
+
             let targetElement = event.target
             let id = targetElement.dataset.id;
             if (!id) {
@@ -128,7 +141,7 @@ window.onload = async () => {
             id = parseInt(id)
             const film = await getFilm(id)
 
-            console.log({film, id});
+            console.log({ film, id });
             if (film) {
                 currentFilm = film
                 form.elements["title"].value = currentFilm.title
@@ -152,9 +165,9 @@ window.onload = async () => {
     }
     const handleDelete = async (event) => {
         try {
-            
+
             let targetElement = event.target
-            
+
             let id = targetElement.dataset.id;
             if (!id) {
                 let parent = targetElement.closest('.deleteFilmButton')
@@ -166,14 +179,14 @@ window.onload = async () => {
             id = parseInt(id)
             const film = await getFilm(id)
             console.log(film);
-            
-             const confirmDelete = confirm(`Êtes vous sûr de vouloir supprimer le film : ${film?.title}`)
-             if(confirmDelete){
+
+            const confirmDelete = confirm(`Êtes vous sûr de vouloir supprimer le film : ${film?.title}`)
+            if (confirmDelete) {
                 deleteFilm(id)
                 displayFilms()
-             }
-            
-            
+            }
+
+
 
         } catch (error) {
             console.log(error)
@@ -181,13 +194,13 @@ window.onload = async () => {
 
     }
 
-    const handleFileChange = (event) =>{
-        const {files} = event.target
-        if(files[0]){
+    const handleFileChange = (event) => {
+        const { files } = event.target
+        if (files[0]) {
             previewImg.src = blobToURL(files[0])
         }
     }
-    
+
 
 
 

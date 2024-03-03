@@ -20,7 +20,10 @@ html{
 .d-block{
     display: block;
 }
-
+[class^="error-"]{
+    color: red;
+    height: 20px;
+}
 html::-webkit-scrollbar{
     width: 0.8rem;
 }
