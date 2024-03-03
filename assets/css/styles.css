@@ -9,10 +9,16 @@
 }
 
 html{
-    font-size: 75.5%;
+    font-size: 95.5%;
     overflow-x: hidden;
     scroll-behavior: smooth ;
     scroll-padding-top: 2rem;
+}
+.d-none{
+    display: none;
+}
+.d-block{
+    display: block;
 }
 
 html::-webkit-scrollbar{

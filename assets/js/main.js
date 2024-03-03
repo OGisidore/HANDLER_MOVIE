@@ -1,43 +1,181 @@
-import { Film, display, displaydetails, url, current_movie } from "./functions.js";
+import { blobToURL, fileToBlob } from './lib/fileHelpers.js';
+import { addFilm, deleteFilm, initFilms, updateFilm } from './db/storage.js';
+import { Film } from './models/Film.js';
+import { current_movie } from './tash/functions.js';
 
-window.onload = ()=>{
+window.onload = async () => {
+
+    const formModal = document.querySelector('.formModal')
+    const form = document.querySelector('.formModal form')
+    const closeFormModal = document.querySelector('.formModal #close')
+    const addFilmButton = document.querySelector('.addFilmButton')
+    const previewImg = document.querySelector('#preview')
+    var currentFilm = undefined
+
+
+    const toogleModal = () => {
+        formModal.classList.toggle('d-none')
+    }
+    /**
+     * 
+     * @param {Array} films Tabeau des films à afficher
+     */
+    const displayFilms = async () => {
+        form.reset()
+        const films_list = document.querySelector('.films_list')
+        films_list.innerHTML = ''
+        const films = await initFilms()
+        films.forEach((data) => {
+            const film = new Film(data._id, data.title, data.realisateur, data.text, data.genre, data.annee, data.image)
+            films_list.innerHTML += film.getHTMLCode()
+
+
+        })
+
+        const editFilmButtons = document.querySelectorAll('.editFilmButton')
+        editFilmButtons.forEach(editFilm => {
+            editFilm.onclick = handleEdit
+
+        });
+       
+        const deleteFilmButtons = document.querySelectorAll('.deleteFilmButton')
+        deleteFilmButtons.forEach(deleteFilm => {
+            deleteFilm.onclick = handleDelete
+
+        });
+    }
+
+    const saveFilm = async (film) => {
+        // filmData.unshift(film)
+        if (currentFilm) {
+            // update
+            await updateFilm(film)
+        } else {
+            //add
+            await addFilm(film)
+
+        }
+        await displayFilms()
+        toogleModal()
+
+    }
+
+    const handleSubmit = async (event) => {
+        event.preventDefault()
+        let fileBlob
+        if (form.elements["image"].files[0]) {
+            fileBlob = await fileToBlob(form.elements["image"].files[0])
+        }
+
+        var newFilm = new Film(
+            '',
+            form.elements["title"]?.value,
+            form.elements["realisateur"]?.value,
+            form.elements["text"]?.value,
+            form.elements["genre"]?.value,
+            form.elements["annee"]?.value,
+            fileBlob
+        )
+
+        // Validation des données reçues
+        if (!newFilm.isValid()) {
+            // afficher les messages d'erreurs
+        }
+
+        if (currentFilm) {
+            // update
+            newFilm._id = currentFilm._id
+            if (!form.elements["image"].files[0]) {
+                newFilm.image = currentFilm.image
+            }
+
+        } else {
+            //add
+            newFilm.image
+
+        }
+
+        saveFilm(newFilm)
+
+
+
+
+
+
+
+    }
+    const handleEdit = async (event) => {
+        try {
+            console.log('target : ', event.target);
+            let targetElement = event.target
+            let id = targetElement.dataset.id;
+            if (!id) {
+                let parent = targetElement.closest('.editFilmButton')
+                if (parent) {
+                    id = parent.dataset.id
+                }
+            }
+
+            const film = (await initFilms()).find(d => d._id == id)
+            console.log({film, id});
+            if (film) {
+                currentFilm = film
+                form.elements["title"].value = currentFilm.title
+                form.elements["realisateur"].value = currentFilm.realisateur
+                form.elements["text"].value = currentFilm.text
+                form.elements["genre"].value = currentFilm.genre
+                form.elements["annee"].value = currentFilm.annee
+                if (typeof currentFilm.image == "string") {
+                    previewImg.src = currentFilm.image
+                } else {
+                    previewImg.src = blobToURL(currentFilm.image)
+                }
+
+                formModal.classList.remove('d-none')
+            }
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
+    const handleDelete = async (event) => {
+        try {
+            
+            let targetElement = event.target
+            
+            let id = targetElement.dataset.id;
+            if (!id) {
+                let parent = targetElement.closest('.deleteFilmButton')
+                if (parent) {
+                    id = parent.dataset.id
+                }
+            }
+            
+            const film = (await initFilms()).find(d => d._id == id)
+            console.log(film);
+            
+             const confirmDelete = confirm(`Êtes vous sûr de vouloir supprimer le film : ${film?.title}`)
+             if(confirmDelete){
+                deleteFilm(id)
+                displayFilms()
+             }
+            
+            
+
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
     
-    
-    console.log(form.elements["title"]);
-    console.log(form);
-    let isMouseDown = false;
-    let startX;
-    const filmsList = document.querySelector('.films_list');
 
-    filmsList.addEventListener('mousedown', function(event) {
-        isMouseDown = true;
-        startX = event.clientX;
-    });
 
-    filmsList.addEventListener('mouseup', function() {
-        isMouseDown = false;
-    });
 
-    filmsList.addEventListener('mousemove', function(event) {
-        if (!isMouseDown) return;
 
-        const currentX = event.clientX;
-        const scrollDistance = startX - currentX;
-
-        // Faites défiler la liste horizontalement en ajustant la position de défilement
-        filmsList.scrollLeft += scrollDistance;
-
-        startX = currentX;
-    });
-    const movies = new Film()
-
-    movies.display_availableMovies()
-    movies.display_currentMovies()
-    document.querySelector("#image").addEventListener("change", movies.read_andGetURL)
-    form.onsubmit = movies.submit_data.bind(movies)
-    filterSelect.onchange = movies.filter_byGenre.bind(movies)
-    sear.onkeyup = movies.search_forMovies.bind(movies)
-    // document.querySelector('form').addEventListener('submit', obj.submit_data.bind(obj));
-
+    displayFilms()
+    addFilmButton.onclick = toogleModal
+    closeFormModal.onclick = toogleModal
+    form.onsubmit = handleSubmit
 
 }
