@@ -125,7 +125,7 @@ export class LocalDatabase {
      * @returns {Promise} A promise that resolves with the retrieved data.
      */
     async getData(dbTable, key) {
-       
+
         this.db = await this.dbPromise;
         return new Promise((resolve, reject) => {
             const transaction = this.db.transaction(dbTable, 'readonly');
@@ -176,14 +176,21 @@ export class LocalDatabase {
      * @returns {Promise} A promise that resolves with the search results.
      */
     async search(tableName, indexName, searchValue) {
-        if (!this.db) {
-            this.db = await this.dbPromise;
-        }
+        this.db = await this.dbPromise;
+
         return new Promise((resolve, reject) => {
             const transaction = this.db.transaction([tableName], 'readonly');
             const objectStore = transaction.objectStore(tableName);
             const index = objectStore.index(indexName);
-            const request = index.openCursor(IDBKeyRange.only(searchValue));
+
+            // let range = IDBKeyRange.only(searchValue)
+            // Use IDBKeyRange.bound to check if searchValue is included in the string
+            const lowerBound = searchValue;
+            const upperBound = searchValue + '\uffff'; // '\uffff' is a high surrogate that covers all possible characters
+            const range = IDBKeyRange.bound(lowerBound, upperBound);
+
+
+            const request = index.openCursor(range);
 
             const results = [];
 
@@ -193,6 +200,7 @@ export class LocalDatabase {
                     results.push(cursor.value);
                     cursor.continue();
                 } else {
+                    console.log(results)
                     resolve(results);
                 }
             };

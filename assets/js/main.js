@@ -1,5 +1,5 @@
 import { blobToURL, fileToBlob } from './lib/fileHelpers.js';
-import { addFilm, deleteFilm, getFilm, initFilms, updateFilm } from './db/storage.js';
+import { addFilm, deleteFilm, getFilm, initFilms, searchFilm, updateFilm } from './db/storage.js';
 import { Film } from './models/Film.js';
 
 window.onload = async () => {
@@ -9,6 +9,7 @@ window.onload = async () => {
     const closeFormModal = document.querySelector('.formModal #close')
     const addFilmButton = document.querySelector('.addFilmButton')
     const previewImg = document.querySelector('#preview')
+    const searchBox = document.querySelector('#search')
     var currentFilm = undefined
 
 
@@ -29,11 +30,13 @@ window.onload = async () => {
      * 
      * @param {Array} films Tabeau des films à afficher
      */
-    const displayFilms = async () => {
+    const displayFilms = async (films = null) => {
         form.reset()
         const films_list = document.querySelector('.films_list')
         films_list.innerHTML = ''
-        const films = await initFilms()
+        if(!films){
+            films = await initFilms()
+        }
         films.forEach((data) => {
             const film = new Film(data._id, data.title, data.realisateur, data.text, data.genre, data.annee, data.image)
             films_list.innerHTML += film.getHTMLCode()
@@ -202,6 +205,14 @@ window.onload = async () => {
     }
 
 
+    const handleSearch = async (event) => {
+        const { value } = event.target
+        const films = await searchFilm(value)
+        displayFilms(films)
+        
+    }
+
+
 
 
 
@@ -209,6 +220,7 @@ window.onload = async () => {
     addFilmButton.onclick = showModal
     closeFormModal.onclick = hideModal
     form.onsubmit = handleSubmit
+    searchBox.onkeyup = handleSearch
     form.querySelector("input[type='file']").onchange = handleFileChange
 
 }
