@@ -1,0 +1,44 @@
+
+.currentFilm{
+    width: 100%;
+   min-height:  60vh;
+    display: flex;
+    justify-content: center;
+    color: #fff;
+    border-bottom: var(--border);
+}
+.currentFilm .description{
+    /* width: 68%; */
+    padding: 2rem;
+    display: flex;
+    gap: 4rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    
+
+}
+.currentFilm .description .text {
+    text-align: justify;
+    line-height: 2rem;
+    max-width:  60rem;
+    /* word-spacing: 1rem; */
+}
+
+.currentFilm .description .text h2{
+    font-size: 2rem;
+    text-transform: capitalize;
+    padding: 2rem 0;
+}
+
+.currentFilm .description .text span{
+    padding: 1rem;
+}
+
+.currentFilm .description .text p{
+    padding: 2rem;
+}
+.currentFilm .description .image img{
+    height: 50vh;
+    width: auto;   
+}
+

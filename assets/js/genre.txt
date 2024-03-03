@@ -1,0 +1,49 @@
+Action
+Aventure
+Animation
+Comédie
+Crime
+Documentaire
+Drame
+Famille
+Fantaisie
+Horreur
+Musique
+Mystère
+Romance
+Science-fiction
+Thriller
+Western
+Biographie
+Guerre
+Historique
+Sport
+
+
+
+
+
+// let isMouseDown = false;
+    // let startX;
+    // const filmsList = document.querySelector('.films_list');
+
+    // filmsList.addEventListener('mousedown', function(event) {
+    //     isMouseDown = true;
+    //     startX = event.clientX;
+    // });
+
+    // filmsList.addEventListener('mouseup', function() {
+    //     isMouseDown = false;
+    // });
+
+    // filmsList.addEventListener('mousemove', function(event) {
+    //     if (!isMouseDown) return;
+
+    //     const currentX = event.clientX;
+    //     const scrollDistance = startX - currentX;
+
+    //     // Faites défiler la liste horizontalement en ajustant la position de défilement
+    //     filmsList.scrollLeft += scrollDistance;
+
+    //     startX = currentX;
+    // });

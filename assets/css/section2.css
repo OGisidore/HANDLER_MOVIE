@@ -1,0 +1,171 @@
+
+
+.container{
+    padding: 1rem 2rem;
+    width: 100%;   
+    
+}
+.container .filter{
+    width: 100%;
+    display: flex;
+    justify-content: end;
+}
+
+
+.container .filter .filter_genre{
+    padding: 0 2rem;
+}
+
+.container .filter .filter_genre select{
+padding: 1rem;
+outline:  none;
+border-radius: .3rem;
+}
+
+.container .films_list{
+    margin-top: 1rem;
+    width: 100%;
+    overflow-x: hidden;
+    gap: 1rem;
+    display: flex;
+}
+
+
+.container .films_list .film{
+    position: relative;
+    cursor: pointer;
+}
+
+.container .films_list .film::after{
+    content: "";
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(
+        to top , var(--primaryColor) 1%, transparent
+    );
+    position: absolute;
+    top: 0;
+    right: 0;
+    z-index: 1;
+
+}
+
+.container .films_list .film svg{
+   width: 1.5rem;
+   padding: .2rem;
+   box-shadow: var(--shadow);
+    background-color: #fff;
+    position: absolute;
+    bottom: 2rem;
+    right: 2rem;
+    z-index: 10;
+}
+
+.container .films_list .film svg:nth-child(2){
+    right: 4rem;
+}
+
+.container .films_list .film img{
+    height: 20rem;
+}
+
+
+.container .films_list .film svg:hover{
+    background-color: var(--forthColor) ;
+    box-shadow: none;
+}
+
+
+
+
+.form{
+    display: none;
+    position: fixed;
+    width: 30rem;
+    padding: 2rem;
+    background-color: transparent;
+    border: .1rem solid #fff;
+    backdrop-filter: blur(10px);
+    top: 48%;
+    left: 48%;
+    transform: translate(-48% ,-48%);
+    border-radius:.5rem;
+    z-index: 100;
+}
+
+.form svg{
+    width: 2rem;
+    padding: .2rem;
+     background-color: #fff;
+     color: red;
+     position: absolute;
+     top: 1rem;
+     right: 2rem;
+     cursor: pointer;
+}
+.form form{
+    padding-top: 2rem;
+}
+.form div{
+    display: flex;
+    flex-direction: column;
+    margin-top: .5rem;
+    /* padding: .5rem; */
+    width: 25rem;
+}
+.form div input,
+.form div select{
+    background: rgba(255, 255, 255, 0.2);
+    padding: .8rem;
+    outline: none;
+    color: #fff;
+    border-radius: .3rem;
+    font-weight: normal;
+}
+.form div select option{
+    background-color: rgba(255, 255, 255, 0.2) ;
+    color: black;
+    
+}
+.form div label{
+    color: #fff;
+}
+.form div textarea{
+    height: 5rem;
+    outline: none;
+    padding: .5rem;
+
+}
+
+.form .btn{
+    width: 100%;
+    flex-direction: row;
+    justify-content: end;
+    gap: 2rem;
+   
+}
+.form .btn button {
+    font-weight: bold;
+   
+    padding: 1rem;
+    z-index: 100;
+}
+
+.form .btn button:hover{
+    background-color: var(--forthColor);
+}
+
+.addbuton{
+
+    position: fixed;
+right: 2rem;   
+   bottom: 50rem;
+}
+
+.addbuton svg{
+    border-radius: 10rem;
+    width: 3rem;
+    height: 3rem;
+    cursor: pointer;
+    background-color:#fff;
+}

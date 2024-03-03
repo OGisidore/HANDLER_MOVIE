@@ -1,0 +1,44 @@
+
+header{
+    position: sticky;
+    top: 0;
+    backdrop-filter: blur(20px);
+
+    padding: .5rem 2rem;
+    border-bottom: var(--border);
+    color: var(--secondaryColor);
+}
+
+header .content{
+    width: 98%;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+
+header .content .logo{
+    font-size: 3rem;
+    font-weight: bold;
+}
+
+ .searchBox{
+    background-color: #fff;
+    padding: .5rem 1rem;
+    display: flex;align-items: center;
+    max-width: 19rem ;
+    
+    border-radius: var(--radius);
+    
+}
+ .searchBox input{
+    width: 15rem;
+    padding: .5rem 1rem;
+    outline: none;
+    border: none;
+
+}
+ .searchBox svg{
+    width: 1rem;
+    margin-right: 1rem;
+    cursor: pointer;
+}

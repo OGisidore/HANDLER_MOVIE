@@ -1,0 +1,49 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+@import url(header.css);
+@import url(section1.css);
+@import url(section2.css);
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html{
+    font-size: 75.5%;
+    overflow-x: hidden;
+    scroll-behavior: smooth ;
+    scroll-padding-top: 2rem;
+}
+
+html::-webkit-scrollbar{
+    width: 0.8rem;
+}
+html::-webkit-scrollbar-track{
+    background: transparent;
+}
+html::-webkit-scrollbar-thumb{
+    background-color: #fff;
+    border-radius: 5rem;
+}
+
+:root{
+    --primaryColor : #0D0D0D;
+    --secondaryColor: #BF1111;
+    --thirthColor : #F2A20C;
+    --forthColor : #8C2016;
+    --thirdColr : #F2BB13;
+    --border: .1rem solid #8C2016;
+    --radius: 2rem;
+    --shadow: .1rem .1rem 1rem .1rem #F96120;
+
+}
+
+body{
+    width: 100vw;
+    margin: 0;
+    padding: 0;
+    font-family: "Poppins", sans-serif;
+    background-color: var(--primaryColor);
+}
+
+
