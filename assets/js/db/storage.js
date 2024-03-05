@@ -37,6 +37,10 @@ export const addFilm = async (newFilms) => {
     delete newFilms._id
     await database.addData('films', newFilms)
 }
+
+export const getFilm = async (id) => {
+    return await database.getData('films', id)
+}
 export const updateFilm = async (newFilms) => {
     await database.updateData('films', newFilms)
 }

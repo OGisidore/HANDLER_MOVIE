@@ -1,5 +1,5 @@
 import { blobToURL, fileToBlob } from './lib/fileHelpers.js';
-import { addFilm, deleteFilm, initFilms, updateFilm } from './db/storage.js';
+import { addFilm, deleteFilm, getFilm, initFilms, updateFilm } from './db/storage.js';
 import { Film } from './models/Film.js';
 import { current_movie } from './tash/functions.js';
 
@@ -39,7 +39,7 @@ window.onload = async () => {
         });
        const filmsView = document.querySelectorAll(".film")
        filmsView.forEach((filmView)=>{
-        filmView.onclick = viewFilm
+        filmView.onclick = handlecurentFilm
        })
         const deleteFilmButtons = document.querySelectorAll('.deleteFilmButton')
         deleteFilmButtons.forEach(deleteFilm => {
@@ -64,11 +64,14 @@ window.onload = async () => {
     }
     const handlecurentFilm = (event)=>{
         let id = parseInt(event.target.dataset.id)
-        let  film = getda
+        console.log(id);
+        let  film = getFilm(id)
+        console.log(film);
+        viewFilm(film)
     }
 
-    const viewFilm = async (film)=>{
-        film.getviewHtmlcode()
+    const viewFilm =  (film)=>{
+       console.log("hello");
 
 
     }
