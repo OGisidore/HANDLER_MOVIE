@@ -42,6 +42,40 @@ export class Film {
         </svg>
     </div>`
     }
+    getviewHtmlcode(){
+        if(typeof this.image !== 'string'){
+            this.image = blobToURL(this.image)
+        }
+        return `
+        <div class="description">
+
+        <div class="text">
+
+            <h2>${this.title}</h2>
+
+            <span>Annee : ${this.annee}</span>
+
+            <span>Genre : ${this.genre}</span>
+
+            <span> Par : ${this.realisateur}</span>
+
+            <p> ${this.text} </p>
+
+        </div>
+
+        <div class="image">
+
+            <img src="${this.image}" alt="l'image du film ${this.title}">
+
+
+
+        </div>
+
+    </div>
+        `
+
+
+    }
 
     /**
      * Indique si les données sont valides

@@ -37,7 +37,10 @@ window.onload = async () => {
             editFilm.onclick = handleEdit
 
         });
-       
+       const filmsView = document.querySelectorAll(".film")
+       filmsView.forEach((filmView)=>{
+        filmView.onclick = viewFilm
+       })
         const deleteFilmButtons = document.querySelectorAll('.deleteFilmButton')
         deleteFilmButtons.forEach(deleteFilm => {
             deleteFilm.onclick = handleDelete
@@ -57,6 +60,30 @@ window.onload = async () => {
         }
         await displayFilms()
         toogleModal()
+
+    }
+
+    const viewFilm = async (event)=>{
+        try {
+           
+            console.log('target : ', event.target);
+            let targetElement = event.target
+            let id = targetElement.dataset.id;
+            console.log(id);
+            if (!id) {
+                let parent = targetElement.closest('.film')
+                if (parent) {
+                    id = parent.dataset.id
+                }
+            }
+
+            const film = (await initFilms()).find(d => d._id == id)
+            console.log({film, id});
+           
+        } catch (error) {
+            console.log(error)
+        }
+
 
     }
 
@@ -109,6 +136,7 @@ window.onload = async () => {
             console.log('target : ', event.target);
             let targetElement = event.target
             let id = targetElement.dataset.id;
+            console.log(id);
             if (!id) {
                 let parent = targetElement.closest('.editFilmButton')
                 if (parent) {
@@ -120,6 +148,8 @@ window.onload = async () => {
             console.log({film, id});
             if (film) {
                 currentFilm = film
+                console.log(currentFilm);
+                document.querySelector(".currentFilm").innerHTML = currentFilm.getviewHtmlcode()
                 form.elements["title"].value = currentFilm.title
                 form.elements["realisateur"].value = currentFilm.realisateur
                 form.elements["text"].value = currentFilm.text
@@ -152,6 +182,7 @@ window.onload = async () => {
                     id = parent.dataset.id
                 }
             }
+            id = parseInt(id)
             
             const film = (await initFilms()).find(d =>  d._id == id)
             console.log(film);
