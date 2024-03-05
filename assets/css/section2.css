@@ -159,7 +159,7 @@ border-radius: .3rem;
 
     position: fixed;
 right: 2rem;   
-   bottom: 50rem;
+   bottom: 50%;
 }
 
 .addFilmButton svg{
