@@ -29,7 +29,7 @@ export class Film {
         }
 
         return `
-        <div class="film" id="film-${this._id}">
+        <div class="film" id="film-${this._id}" data-id = "${this._id}">
         <img src="${this.image}" alt="images du film ${this.title}">
         <svg class="deleteFilmButton" data-id="${this._id}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
             <path

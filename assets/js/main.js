@@ -31,6 +31,7 @@ window.onload = async () => {
 
 
         })
+        viewFilm(films[0])
 
         const editFilmButtons = document.querySelectorAll('.editFilmButton')
         editFilmButtons.forEach(editFilm => {
@@ -58,20 +59,32 @@ window.onload = async () => {
             await addFilm(film)
 
         }
+        viewFilm(film)
+
         await displayFilms()
         toogleModal()
 
     }
-    const handlecurentFilm = (event)=>{
+    const handlecurentFilm = async (event)=>{
         let id = parseInt(event.target.dataset.id)
         console.log(id);
-        let  film = getFilm(id)
-        console.log(film);
-        viewFilm(film)
+        if(id){
+            const  film = await getFilm(id)
+            viewFilm(film)
+            console.log(film);
+
+        }
+
+        
+        
+        
     }
 
     const viewFilm =  (film)=>{
        console.log("hello");
+        const movie = new Film(film._id, film.title, film.realisateur, film.text, film.genre, film.annee, film.image)
+            // films_list.innerHTML += film.getHTMLCode()
+       document.querySelector(".currentFilm").innerHTML = movie.getviewHtmlcode()
 
 
     }
@@ -112,6 +125,7 @@ window.onload = async () => {
         }
 
         saveFilm(newFilm)
+        // viewFilm(newFilm)
 
 
 
