@@ -62,27 +62,13 @@ window.onload = async () => {
         toogleModal()
 
     }
+    const handlecurentFilm = (event)=>{
+        let id = parseInt(event.target.dataset.id)
+        let  film = getda
+    }
 
-    const viewFilm = async (event)=>{
-        try {
-           
-            console.log('target : ', event.target);
-            let targetElement = event.target
-            let id = targetElement.dataset.id;
-            console.log(id);
-            if (!id) {
-                let parent = targetElement.closest('.film')
-                if (parent) {
-                    id = parent.dataset.id
-                }
-            }
-
-            const film = (await initFilms()).find(d => d._id == id)
-            console.log({film, id});
-           
-        } catch (error) {
-            console.log(error)
-        }
+    const viewFilm = async (film)=>{
+        film.getviewHtmlcode()
 
 
     }
