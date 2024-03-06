@@ -1,7 +1,7 @@
 import { blobToURL, fileToBlob } from './lib/fileHelpers.js';
 import { addFilm, deleteFilm, getFilm, initFilms, updateFilm } from './db/storage.js';
 import { Film } from './models/Film.js';
-import { current_movie } from './tash/functions.js';
+// import { current_movie } from './tash/functions.js';
 
 window.onload = async () => {
 
@@ -10,6 +10,9 @@ window.onload = async () => {
     const closeFormModal = document.querySelector('.formModal #close')
     const addFilmButton = document.querySelector('.addFilmButton')
     const previewImg = document.querySelector('#preview')
+    const searchByTitle = document.querySelector("#search")
+    const searchGenre = document.querySelector("#filter_genre")
+    const searchBy_date = document.querySelector("#filter_date")
     var currentFilm = undefined
 
 
@@ -20,10 +23,11 @@ window.onload = async () => {
      * 
      * @param {Array} films Tabeau des films à afficher
      */
-    const displayFilms = async () => {
+    const displayFilms = async (movies) => {
         form.reset()
         const films_list = document.querySelector('.films_list')
-        films_list.innerHTML = ''
+        films_list.innerHTML = '';
+
         const films = await initFilms()
         films.forEach((data) => {
             const film = new Film(data._id, data.title, data.realisateur, data.text, data.genre, data.annee, data.image)
@@ -31,6 +35,16 @@ window.onload = async () => {
 
 
         })
+        if (movies) {
+            films_list.innerHTML = '';
+            movies.forEach((film) => {
+                const films = new Film(film._id, film.title, film.realisateur, film.text, film.genre, film.annee, film.image)
+                films_list.innerHTML += films.getHTMLCode()
+            })
+
+
+        }
+
         viewFilm(films[0])
 
         const editFilmButtons = document.querySelectorAll('.editFilmButton')
@@ -38,10 +52,10 @@ window.onload = async () => {
             editFilm.onclick = handleEdit
 
         });
-       const filmsView = document.querySelectorAll(".film")
-       filmsView.forEach((filmView)=>{
-        filmView.onclick = handlecurentFilm
-       })
+        const filmsView = document.querySelectorAll(".film")
+        filmsView.forEach((filmView) => {
+            filmView.onclick = handlecurentFilm
+        })
         const deleteFilmButtons = document.querySelectorAll('.deleteFilmButton')
         deleteFilmButtons.forEach(deleteFilm => {
             deleteFilm.onclick = handleDelete
@@ -65,26 +79,26 @@ window.onload = async () => {
         toogleModal()
 
     }
-    const handlecurentFilm = async (event)=>{
+    const handlecurentFilm = async (event) => {
         let id = parseInt(event.target.dataset.id)
         console.log(id);
-        if(id){
-            const  film = await getFilm(id)
+        if (id) {
+            const film = await getFilm(id)
             viewFilm(film)
             console.log(film);
 
         }
 
-        
-        
-        
+
+
+
     }
 
-    const viewFilm =  (film)=>{
-       console.log("hello");
+    const viewFilm = (film) => {
+        console.log("hello");
         const movie = new Film(film._id, film.title, film.realisateur, film.text, film.genre, film.annee, film.image)
-            // films_list.innerHTML += film.getHTMLCode()
-       document.querySelector(".currentFilm").innerHTML = movie.getviewHtmlcode()
+        // films_list.innerHTML += film.getHTMLCode()
+        document.querySelector(".currentFilm").innerHTML = movie.getviewHtmlcode()
 
 
     }
@@ -134,6 +148,65 @@ window.onload = async () => {
 
 
     }
+    const handlesearch = {
+        searchBy_title: async (event) => {
+
+            event.preventDefault();
+            let tag = searchByTitle.value.trim();
+            console.log(tag);
+            var films = await initFilms()
+
+
+            films = films.filter(
+                (t) => t.title.toLowerCase().search(tag.toLowerCase()) !== -1 || t.realisateur.toLowerCase().search(tag.toLowerCase()) !== -1
+            );
+            console.log({ films });
+            displayFilms(films);
+
+        },
+        searchBy_genre: async (event) => {
+
+            event.preventDefault();
+            let tag = searchGenre.value.trim();
+            console.log(tag);
+            var films = await initFilms()
+            if (tag !== "tout") {
+
+                films = films.filter(
+                    (t) => t.genre.toLowerCase().search(tag.toLowerCase()) !== -1
+                );
+            }
+
+
+
+
+            console.log({ films });
+            displayFilms(films);
+
+        },
+        search_by_date: async (event) => {
+
+            event.preventDefault();
+            let tag = parseInt(searchBy_date.value.trim());
+            console.log(tag);
+            var films = await initFilms()
+
+
+            
+            films = films.filter(
+                (film) => film.annee === tag
+            );
+
+
+
+
+
+            console.log({ films });
+            displayFilms(films);
+
+        }
+
+    }
     const handleEdit = async (event) => {
         try {
             console.log('target : ', event.target);
@@ -148,7 +221,7 @@ window.onload = async () => {
             }
 
             const film = (await initFilms()).find(d => d._id == id)
-            console.log({film, id});
+            console.log({ film, id });
             if (film) {
                 currentFilm = film
                 console.log(currentFilm);
@@ -174,9 +247,9 @@ window.onload = async () => {
     }
     const handleDelete = async (event) => {
         try {
-            
+
             let targetElement = event.target
-            
+
             let id = targetElement.dataset.id;
             console.log(id);
             if (!id) {
@@ -186,30 +259,33 @@ window.onload = async () => {
                 }
             }
             id = parseInt(id)
-            
-            const film = (await initFilms()).find(d =>  d._id == id)
+
+            const film = (await initFilms()).find(d => d._id == id)
             console.log(film);
-            
-             const confirmDelete = confirm(`Êtes vous sûr de vouloir supprimer le film : ${film?.title}`)
-             if(confirmDelete){
+
+            const confirmDelete = confirm(`Êtes vous sûr de vouloir supprimer le film : ${film?.title}`)
+            if (confirmDelete) {
                 deleteFilm(id)
-                
-             }
+
+            }
             displayFilms()
-            
+
 
         } catch (error) {
             console.log(error)
         }
 
     }
-    
+
 
 
 
 
     displayFilms()
     addFilmButton.onclick = toogleModal
+    searchByTitle.onkeyup = handlesearch.searchBy_title
+    searchGenre.onchange = handlesearch.searchBy_genre
+    searchBy_date.onkeyup = handlesearch.search_by_date
     closeFormModal.onclick = toogleModal
     form.onsubmit = handleSubmit
 
